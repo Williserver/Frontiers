@@ -1,0 +1,4 @@
+name: Frontiers
+main: net.williserver.frontiers.FrontiersPlugin
+version: 1.0
+api-version: 1.21
