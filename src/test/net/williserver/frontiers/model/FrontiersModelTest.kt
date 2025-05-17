@@ -61,4 +61,21 @@ class FrontiersModelTest {
         assertEquals(10u, model.currentTier)
         assertThrows(IllegalArgumentException::class.java) { model.currentTier = 0u }
     }
+
+    @Test
+    fun testTierWidth() {
+        val model = FrontiersModel(FrontiersData(1u), config, LogHandler(null))
+        assertEquals(1000u, model.safezoneWidth())
+        assertEquals(1000u, model.frontierWidth())
+        assertEquals(2000u, model.totalWidth())
+
+        model.currentTier += 1u
+        assertEquals(2000u, model.safezoneWidth())
+        assertEquals(1000u, model.frontierWidth())
+        assertEquals(3000u, model.totalWidth())
+
+        // The frontier width is always a single tier.
+        model.currentTier += 100000u
+        assertEquals(1000u, model.frontierWidth())
+    }
 }

@@ -21,7 +21,7 @@ data class FrontiersData(val currentTier: UInt = FrontiersModel.MINIMUM_TIER)
  * - A safe zone of TIER_SIZE width will always be present
  * - The frontier will contain all land from n-1 -> n tiers
  */
-class FrontiersModel(data: FrontiersData, config: FrontiersConfig, logger: LogHandler) {
+class FrontiersModel(data: FrontiersData, private val config: FrontiersConfig, private val logger: LogHandler) {
     // If the persistent data indicates we have moved beyond the starter tier, bump.
     var currentTier = run {
         val tier = if (data.currentTier > MINIMUM_TIER) {
@@ -33,20 +33,40 @@ class FrontiersModel(data: FrontiersData, config: FrontiersConfig, logger: LogHa
         tier
     }
     set(value) =
-        if (value > MINIMUM_TIER) {
+        if (value >= MINIMUM_TIER) {
             field = value
         } else {
             throw IllegalArgumentException("$PLUGIN_PREFIX: Tier must be greater than or equal to $MINIMUM_TIER. This should have been caught earlier.")
         }
+
+    /*
+     * Width calculators
+     */
+
+    /**
+     * @return The width of the safezone, which is always the current tier * tierSize. The next space will be past that.
+     */
+    fun safezoneWidth() = currentTier * config.tierSize
+
+    /**
+     * @return The width of the frontier, which is always tiersize -- the Frontier is always the single last tier.
+     */
+    fun frontierWidth() = config.tierSize
+
+    /**
+     * @return The total width of the border on this server, including the safezone and the frontier.
+     */
+    fun totalWidth() = safezoneWidth() + frontierWidth()
+
+    /*
+     * Assorted helpers
+     */
 
     /**
      * @return a serializable `FrontiersData` object containing the current tier of the model.
      */
     fun asDataTuple() = FrontiersData(currentTier)
 
-    /*
-     * Comparison helpers
-     */
     override fun equals(other: Any?) = other is FrontiersModel && this.currentTier == other.currentTier
 
     override fun hashCode() = currentTier.hashCode()
@@ -54,7 +74,7 @@ class FrontiersModel(data: FrontiersData, config: FrontiersConfig, logger: LogHa
     override fun toString() = "FrontiersModel(currentTier=$currentTier)"
 
     /*
-     * Static state
+     * Static state and functions
      */
     companion object {
         // Model enforces that tier must be at least one.
