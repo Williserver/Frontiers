@@ -2,5 +2,7 @@
 
 # Border width per tier. Note that this will always be the width of the Frontier from the Heartland.
 # Must be > 0.
+# NOTE: CHANGING THIS OPTION AFTER SERVER LAUNCH MAY HAVE UNDESIRED CONSEQUENCES!
+
 # Default: 1000
 tierSize: 1000

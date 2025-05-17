@@ -16,7 +16,7 @@ class FrontiersModelTest {
      * - A `FrontiersModel` initialized with a tier above the default tier correctly sets the current tier to the specified value.
      */
     @Test
-    fun FrontiersModelInitTest() {
+    fun testFrontiersModelInit() {
         val belowDefaultModel = FrontiersModel(FrontiersData(0u), LogHandler(null))
         assertEquals(FrontiersModel.DEFAULT_TIER, belowDefaultModel.currentTier)
 
@@ -37,7 +37,7 @@ class FrontiersModelTest {
     fun testReadWriteFrontier() {
         val model = FrontiersModel(FrontiersData(100u), LogHandler(null))
         FrontiersModel.writeToFile(model, "test.json")
-        val newModel = FrontiersModel(FrontiersModel.readFromFile("test.json", LogHandler(null)), LogHandler(null))
+        val newModel = FrontiersModel.readFromFile("test.json", LogHandler(null))
         assertEquals(model, newModel)
     }
 }

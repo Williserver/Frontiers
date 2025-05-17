@@ -57,15 +57,15 @@ class FrontiersModel(data: FrontiersData, logger: LogHandler) {
          * @param logger the logger used for logging error and informational messages.
          * @return the deserialized frontier data if the file exists, or a new instance of `FrontiersData` if the file does not exist.
          */
-        fun readFromFile(path: String, logger: LogHandler): FrontiersData =
+        fun readFromFile(path: String, logger: LogHandler): FrontiersModel =
             if (!File(path).exists()) {
-                logger.err("Frontiers file $path does not exist, creating new one.")
-                FrontiersData()
+                logger.err("Frontiers file $path does not exist, creating default frontier model.")
+                FrontiersModel(FrontiersData(), logger)
             } else {
                 val reader = FileReader(path)
                 val jsonString = reader.readText()
                 reader.close()
-                Json.decodeFromString<FrontiersData>(jsonString)
+                FrontiersModel(Json.decodeFromString<FrontiersData>(jsonString), logger)
             }
 
         /**
