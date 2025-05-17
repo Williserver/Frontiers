@@ -1,4 +1,5 @@
 dependency-reduced-pom.xml
+test.json
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
