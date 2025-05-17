@@ -2,6 +2,7 @@ package net.williserver.frontiers.model
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import net.williserver.frontiers.FrontiersConfig
+import net.williserver.frontiers.FrontiersPlugin.Companion.PLUGIN_PREFIX
 import net.williserver.frontiers.LogHandler
 import java.io.File
 import java.io.FileReader
@@ -13,7 +14,7 @@ import java.io.FileWriter
  * @property currentTier The current tier level of the frontier, represented as an unsigned integer.
  */
 @Serializable
-data class FrontiersData(val currentTier: UInt = FrontiersModel.DEFAULT_TIER)
+data class FrontiersData(val currentTier: UInt = FrontiersModel.MINIMUM_TIER)
 
 /**
  * Data model for the Frontiers plugin. Represents what frontier we're in.
@@ -23,14 +24,20 @@ data class FrontiersData(val currentTier: UInt = FrontiersModel.DEFAULT_TIER)
 class FrontiersModel(data: FrontiersData, config: FrontiersConfig, logger: LogHandler) {
     // If the persistent data indicates we have moved beyond the starter tier, bump.
     var currentTier = run {
-        val tier = if (data.currentTier > DEFAULT_TIER) {
+        val tier = if (data.currentTier > MINIMUM_TIER) {
             data.currentTier
         } else {
-            DEFAULT_TIER
+            MINIMUM_TIER
         }
         logger.info("Initialized with tier: $tier")
         tier
     }
+    set(value) =
+        if (value > MINIMUM_TIER) {
+            field = value
+        } else {
+            throw IllegalArgumentException("$PLUGIN_PREFIX: Tier must be greater than or equal to $MINIMUM_TIER. This should have been caught earlier.")
+        }
 
     /**
      * @return a serializable `FrontiersData` object containing the current tier of the model.
@@ -50,8 +57,8 @@ class FrontiersModel(data: FrontiersData, config: FrontiersConfig, logger: LogHa
      * Static state
      */
     companion object {
-        // By default, the model starts at tier one.
-        const val DEFAULT_TIER = 1u
+        // Model enforces that tier must be at least one.
+        const val MINIMUM_TIER = 1u
 
         /**
          * @param path the file path from which to read the frontier data.
