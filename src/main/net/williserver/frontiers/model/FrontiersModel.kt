@@ -1,6 +1,7 @@
 package net.williserver.frontiers.model
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import net.williserver.frontiers.FrontiersConfig
 import net.williserver.frontiers.LogHandler
 import java.io.File
 import java.io.FileReader
@@ -19,7 +20,7 @@ data class FrontiersData(val currentTier: UInt = FrontiersModel.DEFAULT_TIER)
  * - A safe zone of TIER_SIZE width will always be present
  * - The frontier will contain all land from n-1 -> n tiers
  */
-class FrontiersModel(data: FrontiersData, logger: LogHandler) {
+class FrontiersModel(data: FrontiersData, config: FrontiersConfig, logger: LogHandler) {
     // If the persistent data indicates we have moved beyond the starter tier, bump.
     var currentTier = run {
         val tier = if (data.currentTier > DEFAULT_TIER) {
@@ -57,15 +58,15 @@ class FrontiersModel(data: FrontiersData, logger: LogHandler) {
          * @param logger the logger used for logging error and informational messages.
          * @return the deserialized frontier data if the file exists, or a new instance of `FrontiersData` if the file does not exist.
          */
-        fun readFromFile(path: String, logger: LogHandler): FrontiersModel =
+        fun readFromFile(path: String, config: FrontiersConfig, logger: LogHandler): FrontiersModel =
             if (!File(path).exists()) {
                 logger.err("Frontiers file $path does not exist, creating default frontier model.")
-                FrontiersModel(FrontiersData(), logger)
+                FrontiersModel(FrontiersData(), config, logger)
             } else {
                 val reader = FileReader(path)
                 val jsonString = reader.readText()
                 reader.close()
-                FrontiersModel(Json.decodeFromString<FrontiersData>(jsonString), logger)
+                FrontiersModel(Json.decodeFromString<FrontiersData>(jsonString), config, logger)
             }
 
         /**

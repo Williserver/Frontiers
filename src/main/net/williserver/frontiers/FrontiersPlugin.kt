@@ -18,7 +18,7 @@ class FrontiersPlugin: JavaPlugin() {
         logger.info("Loaded config.")
 
         /* Initialize FrontiersModel */
-        model = FrontiersModel.readFromFile(path, logger)
+        model = FrontiersModel.readFromFile(path, frontiersConfig, logger)
         logger.info("Loaded persistent data.")
 
         logger.info("Frontiers enabled")

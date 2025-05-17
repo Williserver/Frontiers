@@ -1,5 +1,6 @@
 package net.williserver.frontiers.model
 
+import net.williserver.frontiers.FrontiersConfig
 import net.williserver.frontiers.LogHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -8,6 +9,8 @@ import kotlin.test.assertEquals
  * @author Willmo3
  */
 class FrontiersModelTest {
+    val config = FrontiersConfig(1000u)
+
     /**
      * Validates the initialization behavior of the `FrontiersModel` class.
      *
@@ -17,10 +20,10 @@ class FrontiersModelTest {
      */
     @Test
     fun testFrontiersModelInit() {
-        val belowDefaultModel = FrontiersModel(FrontiersData(0u), LogHandler(null))
+        val belowDefaultModel = FrontiersModel(FrontiersData(0u), config, LogHandler(null))
         assertEquals(FrontiersModel.DEFAULT_TIER, belowDefaultModel.currentTier)
 
-        val aboveDefaultModel = FrontiersModel(FrontiersData(100u), LogHandler(null))
+        val aboveDefaultModel = FrontiersModel(FrontiersData(100u), config, LogHandler(null))
         assertEquals(100u, aboveDefaultModel.currentTier)
     }
 
@@ -35,9 +38,9 @@ class FrontiersModelTest {
      */
     @Test
     fun testReadWriteFrontier() {
-        val model = FrontiersModel(FrontiersData(100u), LogHandler(null))
+        val model = FrontiersModel(FrontiersData(100u), config, LogHandler(null))
         FrontiersModel.writeToFile(model, "test.json")
-        val newModel = FrontiersModel.readFromFile("test.json", LogHandler(null))
+        val newModel = FrontiersModel.readFromFile("test.json", config, LogHandler(null))
         assertEquals(model, newModel)
     }
 }
