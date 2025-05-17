@@ -3,12 +3,17 @@ package net.williserver.frontiers
 import org.bukkit.plugin.java.JavaPlugin
 
 class FrontiersPlugin: JavaPlugin() {
+    private val logger = LogHandler(super.getLogger())
+
     override fun onEnable() {
-        super.onEnable()
+        saveDefaultConfig()
         logger.info("Frontiers enabled")
     }
     override fun onDisable() {
-        super.onDisable()
         logger.info("Frontiers disabled")
+    }
+
+    companion object {
+        const val PLUGIN_PREFIX = "[Frontiers]"
     }
 }
