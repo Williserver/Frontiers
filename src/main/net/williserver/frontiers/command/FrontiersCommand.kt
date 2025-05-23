@@ -37,6 +37,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
         when (subcommand) {
             "get" -> get(sender)
             "open" -> open()
+            "close" -> close()
             else -> return false
         }
 
@@ -73,6 +74,19 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
     private fun open(): Boolean {
         model.open = true
         broadcastPrefixedMessage(Component.text("The frontier has OPENED!", NamedTextColor.DARK_PURPLE))
+        integrator.updateWidth()
+        return true
+    }
+
+    /**
+     * Subfunction for close command.
+     * Format: /frontiers close
+     *
+     * This removes access to the Frontier, reducing the worldborder to the safezone.
+     */
+    private fun close(): Boolean {
+        model.open = false
+        broadcastPrefixedMessage(Component.text("The frontier has CLOSED!", NamedTextColor.DARK_PURPLE))
         integrator.updateWidth()
         return true
     }
