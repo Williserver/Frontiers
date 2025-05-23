@@ -41,6 +41,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
             "close" -> close()
             "dec" -> dec(sender)
             "inc" -> inc()
+            "set" -> set(sender, args.copyOfRange(1, args.size))
             else -> return false
         }
 
@@ -116,4 +117,34 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
             integrator.updateWidth()
             true
         }
+
+    /**
+     * Subfunction for set command.
+     * Format: /frontiers set (size)
+     *
+     * @param s Entity invoking command.
+     * @param args Arguments to command. Should be one: the new tier.
+     */
+    private fun set(s: CommandSender, args: Array<out String>): Boolean {
+        // Argument structure validation. One arg: new tier
+        if (args.size != 1) {
+            return false
+        }
+
+        // Argument semantics validation: one tier that's a UInt above minimum.
+        val newTier = args[0].toUIntOrNull()
+        if (newTier == null) {
+            sendErrorMessage(s, "Invalid tier specified.")
+            return true
+        } else if (newTier < FrontiersModel.MINIMUM_TIER) {
+            sendErrorMessage(s, "Tier must be at least ${FrontiersModel.MINIMUM_TIER}.")
+            return true
+        }
+
+        // Validation complete, update persistent data and worldborder
+        model.currentTier = newTier
+        broadcastPrefixedMessage(Component.text("The frontier has been set to tier ${newTier}!", NamedTextColor.DARK_PURPLE))
+        integrator.updateWidth()
+        return true
+    }
 }

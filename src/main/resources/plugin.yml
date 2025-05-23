@@ -6,7 +6,7 @@ api-version: 1.21
 commands:
   frontiers:
     description: Frontiers root command.
-    usage: "Usage: /frontiers [get | open | close | inc | dec]"
+    usage: "Usage: /frontiers [get | open | close | inc | dec | set (size)]"
 
 permissions:
   frontiers.get:
