@@ -5,6 +5,8 @@ import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.williserver.frontiers.model.FrontiersModel
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import kotlin.math.abs
 
 /**
  * Integrates the model with the actual server world.
@@ -14,6 +16,29 @@ import org.bukkit.Bukkit
  * @author Willmo3
  */
 class FrontiersVanillaIntegrator(private val model: FrontiersModel) {
+    /**
+     * Basis for a given session. Worldspawn/
+     */
+    private val basis = Bukkit.getWorld("world")!!.spawnLocation.toBlockLocation()
+
+    /**
+     * @param player Player to check if in Heartlands
+     * @return whether the player is in the Heartlands.
+     */
+    fun inHeartlands(player: Player): Boolean {
+        // All territory outside the overworld is considered Frontier!
+        if (player.world != basis.world) {
+            return false
+        }
+
+        // Extend safezone radius by 2 to avoid rounding subtleties
+        val safezoneRadius = (model.safezoneWidth() / 2u).toDouble() + 2
+        val xDistance = abs(player.location.x - basis.x)
+        val zDistance = abs(player.location.z - basis.z)
+
+        return xDistance <= safezoneRadius && zDistance <= safezoneRadius
+    }
+
     /**
      * @return TextComponent with information about the server.
      */

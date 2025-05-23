@@ -12,6 +12,9 @@ permissions:
   frontiers.get:
     description: Allows /frontiers get
     default: true
+  frontiers.me:
+    description: Allows /frontiers me
+    default: true
   frontiers.open:
     description: Allows /frontiers open
     default: op

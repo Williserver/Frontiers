@@ -3,7 +3,6 @@ package net.williserver.frontiers.command
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.williserver.frontiers.integration.FrontiersVanillaIntegrator
-import net.williserver.frontiers.integration.broadcastMessage
 import net.williserver.frontiers.integration.broadcastPrefixedMessage
 import net.williserver.frontiers.integration.sendErrorMessage
 import net.williserver.frontiers.integration.sendPrefixedMessage
@@ -11,6 +10,7 @@ import net.williserver.frontiers.model.FrontiersModel
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
 /**
  * Root command for Frontiers plugin. Expands and opens / closes frontier.
@@ -42,6 +42,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
             "dec" -> dec(sender)
             "inc" -> inc()
             "set" -> set(sender, args.copyOfRange(1, args.size))
+            "me" -> me(sender)
             else -> return false
         }
 
@@ -53,6 +54,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
      * Format: /frontiers get
      *
      * @param s Entity which sent the command.
+     * @return `true` after successfully invoking command.
      */
     private fun get(s: CommandSender): Boolean {
         s.sendMessage(integrator.info())
@@ -65,6 +67,8 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
      *
      * This allows the Frontier to be accessed by expanding the worldborder.
      * Note that the integrator can be used to determine if a player is in the Frontier or not.
+     *
+     * @return `true` after succesfully invoking command.
      */
     private fun open(): Boolean {
         model.open = true
@@ -78,6 +82,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
      * Format: /frontiers close
      *
      * This removes access to the Frontier, reducing the worldborder to the safezone.
+     * @return `true` after successfully invoking command.
      */
     private fun close(): Boolean {
         model.open = false
@@ -91,6 +96,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
      * Format: /frontiers inc
      *
      * This increases the frontier by one tier.
+     * @return `true` after successfully invoking command.
      */
     private fun inc(): Boolean {
         model.currentTier += 1u
@@ -106,6 +112,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
      * @param s Entity invoking command.
      *
      * This decreases the frontier by one tier.
+     * @return `true` after successfully invoking command.
      */
     private fun dec(s: CommandSender) =
         if (model.currentTier == FrontiersModel.MINIMUM_TIER) {
@@ -124,6 +131,8 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
      *
      * @param s Entity invoking command.
      * @param args Arguments to command. Should be one: the new tier.
+     *
+     * @return Whether this command was invoked with exactly one argument.
      */
     private fun set(s: CommandSender, args: Array<out String>): Boolean {
         // Argument structure validation. One arg: new tier
@@ -145,6 +154,26 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
         model.currentTier = newTier
         broadcastPrefixedMessage(Component.text("The frontier has been set to tier ${newTier}!", NamedTextColor.DARK_PURPLE))
         integrator.updateWidth()
+        return true
+    }
+
+    /**
+     * Subfunction for me command.
+     * Reports to a player whether their current location is within the safezone.
+     *
+     * @param s CommandSender to report safezone status to, or complain if not.
+     * @return `true` after executing.
+     */
+    private fun me(s: CommandSender): Boolean {
+        if (s !is Player) {
+            sendErrorMessage(s, "You must be a player to use this command.")
+            return true
+        }
+
+        when (integrator.inHeartlands(s)) {
+            true -> sendPrefixedMessage(s, Component.text("You are in the Heartlands.", NamedTextColor.GREEN))
+            false -> sendPrefixedMessage(s, Component.text("You are in the Frontier!", NamedTextColor.DARK_RED))
+        }
         return true
     }
 }
