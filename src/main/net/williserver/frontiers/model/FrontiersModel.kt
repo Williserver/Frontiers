@@ -87,7 +87,7 @@ class FrontiersModel(data: FrontiersData,
     /**
      * @return a serializable `FrontiersData` object containing the current tier of the model.
      */
-    fun asDataTuple() = FrontiersData(currentTier)
+    fun asDataTuple() = FrontiersData(currentTier, open)
 
     override fun equals(other: Any?) = other is FrontiersModel && this.currentTier == other.currentTier
 
