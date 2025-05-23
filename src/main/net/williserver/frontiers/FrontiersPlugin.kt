@@ -1,5 +1,7 @@
 package net.williserver.frontiers
 
+import net.williserver.frontiers.command.FrontiersCommand
+import net.williserver.frontiers.command.FrontiersTabCompleter
 import net.williserver.frontiers.model.FrontiersModel
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -20,6 +22,10 @@ class FrontiersPlugin: JavaPlugin() {
         /* Initialize FrontiersModel */
         model = FrontiersModel.readFromFile(path, frontiersConfig, logger)
         logger.info("Loaded persistent data.")
+
+        /* Ready command */
+        getCommand("frontiers")!!.setExecutor(FrontiersCommand(model))
+        getCommand("frontiers")!!.tabCompleter = FrontiersTabCompleter()
 
         logger.info("Frontiers enabled")
     }

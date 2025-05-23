@@ -2,3 +2,13 @@ name: Frontiers
 main: net.williserver.frontiers.FrontiersPlugin
 version: 1.0
 api-version: 1.21
+
+commands:
+  frontiers:
+    description: Frontiers root command.
+    usage: "Usage: /frontiers [get]"
+
+permissions:
+  tiers.get:
+    description: Allows /tiers get
+    default: true
