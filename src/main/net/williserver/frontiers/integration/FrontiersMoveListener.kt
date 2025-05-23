@@ -95,7 +95,7 @@ class FrontierEnterListener(val integrator: FrontiersVanillaIntegrator): Listene
     private fun greetFrontier(p: Player)
         = p.showTitle(Title.title(
             Component.text(
-                "You have entered the Frontier!",
+                "The Frontier",
                 NamedTextColor.DARK_RED
             ), Component.empty()
         ))
@@ -106,7 +106,7 @@ class FrontierEnterListener(val integrator: FrontiersVanillaIntegrator): Listene
     private fun greetHeartlands(p: Player)
         = p.showTitle(Title.title(
             Component.text(
-                "You have entered the Heartlands!",
+                "The Heartlands",
                 NamedTextColor.GREEN
             ), Component.empty()
         ))
