@@ -2,9 +2,12 @@ package net.williserver.frontiers.integration
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.UUID
 
@@ -38,12 +41,10 @@ class FrontierEnterListener(val integrator: FrontiersVanillaIntegrator): Listene
 
         if (integrator.inHeartlands(player)) {
             playersInHeartlands += player.uniqueId
-            sendPrefixedMessage(player,
-                Component.text("You have entered the Heartlands!", NamedTextColor.GREEN))
+            greetHeartlands(player)
         } else {
             playersInFrontier += player.uniqueId
-            sendPrefixedMessage(player,
-                Component.text("You have entered the Frontier!", NamedTextColor.DARK_RED))
+            greetFrontier(player)
         }
     }
 
@@ -59,4 +60,38 @@ class FrontierEnterListener(val integrator: FrontiersVanillaIntegrator): Listene
         playersInFrontier -= id
         playersInHeartlands -= id
     }
+
+    @EventHandler
+    fun onPlayerMove(event: PlayerMoveEvent) {
+        // Ignore extraneous moves.
+        if (event.from.blockX == event.to.blockX && event.from.blockZ == event.to.blockZ) {
+            return
+        }
+
+        val player = event.player
+        val wasInHeartlands = player.uniqueId in playersInHeartlands
+        val isNowInHeartlands = integrator.inHeartlands(player)
+
+        if (wasInHeartlands && !isNowInHeartlands) {
+            // Moved to the frontier from the heartlands.
+            playersInHeartlands -= player.uniqueId
+            playersInFrontier += player.uniqueId
+            greetFrontier(player)
+        } else if (!wasInHeartlands && isNowInHeartlands) {
+            // Moved to the heartlands from the frontier.
+            playersInFrontier -= player.uniqueId
+            playersInHeartlands += player.uniqueId
+            greetHeartlands(player)
+        }
+    }
+
+    /*
+     * Player state change greeters,
+     */
+
+    private fun greetFrontier(p: Player)
+        = sendPrefixedMessage(p, Component.text("You have entered the Frontier!", NamedTextColor.DARK_RED))
+
+    private fun greetHeartlands(p: Player)
+        = sendPrefixedMessage(p, Component.text("You have entered the Heartlands!", NamedTextColor.GREEN))
 }
