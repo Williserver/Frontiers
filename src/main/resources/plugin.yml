@@ -6,9 +6,12 @@ api-version: 1.21
 commands:
   frontiers:
     description: Frontiers root command.
-    usage: "Usage: /frontiers [get]"
+    usage: "Usage: /frontiers [get | open]"
 
 permissions:
   tiers.get:
-    description: Allows /tiers get
+    description: Allows /frontiers get
     default: true
+  tiers.open:
+    description: Allows /frontiers open
+    default: op

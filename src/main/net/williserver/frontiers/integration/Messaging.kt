@@ -1,8 +1,9 @@
-package net.williserver.frontiers.command
+package net.williserver.frontiers.integration
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.williserver.frontiers.FrontiersPlugin.Companion.PLUGIN_PREFIX
+import org.bukkit.Bukkit.broadcast
 import org.bukkit.command.CommandSender
 
 /**
@@ -31,3 +32,11 @@ fun prefixedMessage(message: Component)
  */
 fun sendPrefixedMessage(s: CommandSender, message: Component)
         = s.sendMessage(prefixedMessage(message))
+
+/**
+ * Broadcast a message component.
+ *
+ * @param message Message to format and broadcast.
+ */
+fun broadcastPrefixedMessage(message: Component)
+        = broadcast(prefixedMessage(message))

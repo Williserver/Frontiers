@@ -18,7 +18,7 @@ class FrontiersTabCompleter: TabCompleter {
         }
 
         if (args.size == 1) {
-            completions.add("get")
+            completions.addAll(setOf("get", "open"))
             completions.removeAll { !it.startsWith(args[0].lowercase()) }
         }
 
