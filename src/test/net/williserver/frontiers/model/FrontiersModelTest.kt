@@ -62,20 +62,25 @@ class FrontiersModelTest {
         assertThrows(IllegalArgumentException::class.java) { model.currentTier = 0u }
     }
 
+    /**
+     * Tests the functionality of the `borderWidth` method in the `FrontiersModel` class.
+     *
+     * This method verifies:
+     * - The initial border width when the frontier is initialized with the default configuration.
+     * - The border width after incrementing the `currentTier` property.
+     * - The border width when the `open` property is set to `true`, which includes the frontier width in the calculation.
+     */
     @Test
     fun testTierWidth() {
         val model = FrontiersModel(FrontiersData(1u), config, LogHandler(null))
-        assertEquals(1000u, model.safezoneWidth())
-        assertEquals(1000u, model.frontierWidth())
-        assertEquals(2000u, model.totalWidth())
+        assertEquals(1000u, model.borderWidth())
 
         model.currentTier += 1u
-        assertEquals(2000u, model.safezoneWidth())
-        assertEquals(1000u, model.frontierWidth())
-        assertEquals(3000u, model.totalWidth())
+        assertEquals(2000u, model.borderWidth())
 
         // The frontier width is always a single tier.
-        model.currentTier += 100000u
-        assertEquals(1000u, model.frontierWidth())
+        // By opening the frontier, we expand without incrementing the tier.
+        model.open = true
+        assertEquals(3000u, model.borderWidth())
     }
 }
