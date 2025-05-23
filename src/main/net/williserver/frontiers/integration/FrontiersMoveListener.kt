@@ -1,8 +1,8 @@
 package net.williserver.frontiers.integration
 
+import net.kyori.adventure.title.Title
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -89,9 +89,25 @@ class FrontierEnterListener(val integrator: FrontiersVanillaIntegrator): Listene
      * Player state change greeters,
      */
 
+    /**
+     * @param p Player to show red frontier warning to.
+     */
     private fun greetFrontier(p: Player)
-        = sendPrefixedMessage(p, Component.text("You have entered the Frontier!", NamedTextColor.DARK_RED))
+        = p.showTitle(Title.title(
+            Component.text(
+                "You have entered the Frontier!",
+                NamedTextColor.DARK_RED
+            ), Component.empty()
+        ))
 
+    /**
+     * @param p Player to show green heartlands welcome to.
+     */
     private fun greetHeartlands(p: Player)
-        = sendPrefixedMessage(p, Component.text("You have entered the Heartlands!", NamedTextColor.GREEN))
+        = p.showTitle(Title.title(
+            Component.text(
+                "You have entered the Heartlands!",
+                NamedTextColor.GREEN
+            ), Component.empty()
+        ))
 }
