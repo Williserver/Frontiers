@@ -9,9 +9,12 @@ commands:
     usage: "Usage: /frontiers [get | open]"
 
 permissions:
-  tiers.get:
+  frontiers.get:
     description: Allows /frontiers get
     default: true
-  tiers.open:
+  frontiers.open:
     description: Allows /frontiers open
+    default: op
+  frontiers.close:
+    description: Allows /frontiers close
     default: op
