@@ -39,6 +39,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
             "get" -> get(sender)
             "open" -> open()
             "close" -> close()
+            "dec" -> dec(sender)
             "inc" -> inc()
             else -> return false
         }
@@ -92,8 +93,27 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
      */
     private fun inc(): Boolean {
         model.currentTier += 1u
-        broadcastPrefixedMessage(Component.text("The frontier has expanded!", NamedTextColor.DARK_PURPLE))
+        broadcastPrefixedMessage(Component.text("The frontier EXPANDS!", NamedTextColor.DARK_PURPLE))
         integrator.updateWidth()
         return true
     }
+
+    /**
+     * Subfunction for dec command.
+     * Format: /frontiers dec
+     *
+     * @param s Entity invoking command.
+     *
+     * This decreases the frontier by one tier.
+     */
+    private fun dec(s: CommandSender) =
+        if (model.currentTier == FrontiersModel.MINIMUM_TIER) {
+            sendErrorMessage(s, "The frontier is already at the minimum tier.")
+            true
+        } else {
+            model.currentTier -= 1u
+            broadcastPrefixedMessage(Component.text("The frontier CONTRACTS!", NamedTextColor.DARK_PURPLE))
+            integrator.updateWidth()
+            true
+        }
 }

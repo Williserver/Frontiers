@@ -20,6 +20,7 @@ class FrontiersPlugin: JavaPlugin() {
     private lateinit var model: FrontiersModel
 
     override fun onEnable() {
+        // TODO: warn about tiers!
         /* Load config */
         saveDefaultConfig()
         val frontiersConfig = FrontiersConfigLoader(logger, config).config

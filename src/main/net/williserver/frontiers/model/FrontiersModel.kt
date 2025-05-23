@@ -79,6 +79,7 @@ class FrontiersModel(data: FrontiersData,
      */
     fun borderWidth() = safezoneWidth() + frontierWidth()
 
+
     /*
      * Assorted helpers
      */

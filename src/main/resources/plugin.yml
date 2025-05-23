@@ -21,3 +21,6 @@ permissions:
   frontiers.inc:
     description: Allows /frontiers inc
     default: op
+  frontiers.dec:
+    description: Allows /frontiers dec
+    default: op
