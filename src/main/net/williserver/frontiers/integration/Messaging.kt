@@ -34,9 +34,17 @@ fun sendPrefixedMessage(s: CommandSender, message: Component)
         = s.sendMessage(prefixedMessage(message))
 
 /**
- * Broadcast a message component.
+ * Broadcast a prefixed message component.
  *
  * @param message Message to format and broadcast.
  */
 fun broadcastPrefixedMessage(message: Component)
         = broadcast(prefixedMessage(message))
+
+/**
+ * Broadcast a preformatted message component.
+ *
+ * @param message Preformatted message to broadcast
+ */
+fun broadcastMessage(message: Component)
+        = broadcast(message)

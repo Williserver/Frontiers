@@ -3,6 +3,7 @@ package net.williserver.frontiers.command
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.williserver.frontiers.integration.FrontiersVanillaIntegrator
+import net.williserver.frontiers.integration.broadcastMessage
 import net.williserver.frontiers.integration.broadcastPrefixedMessage
 import net.williserver.frontiers.integration.sendErrorMessage
 import net.williserver.frontiers.integration.sendPrefixedMessage
@@ -38,6 +39,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
             "get" -> get(sender)
             "open" -> open()
             "close" -> close()
+            "inc" -> inc()
             else -> return false
         }
 
@@ -51,16 +53,7 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
      * @param s Entity which sent the command.
      */
     private fun get(s: CommandSender): Boolean {
-        val openMessage = if (model.open) "open" else "closed"
-        sendPrefixedMessage(
-            s,
-            Component.text(
-                "Server is on tier ${model.currentTier}. " +
-                        "The frontier is $openMessage, so the border width is ${model.borderWidth()}.",
-                NamedTextColor.GRAY
-            )
-        )
-
+        s.sendMessage(integrator.info())
         return true
     }
 
@@ -87,6 +80,19 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanil
     private fun close(): Boolean {
         model.open = false
         broadcastPrefixedMessage(Component.text("The frontier has CLOSED!", NamedTextColor.DARK_PURPLE))
+        integrator.updateWidth()
+        return true
+    }
+
+    /**
+     * Subfunction for inc command.
+     * Format: /frontiers inc
+     *
+     * This increases the frontier by one tier.
+     */
+    private fun inc(): Boolean {
+        model.currentTier += 1u
+        broadcastPrefixedMessage(Component.text("The frontier has expanded!", NamedTextColor.DARK_PURPLE))
         integrator.updateWidth()
         return true
     }

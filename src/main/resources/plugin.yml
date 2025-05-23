@@ -6,7 +6,7 @@ api-version: 1.21
 commands:
   frontiers:
     description: Frontiers root command.
-    usage: "Usage: /frontiers [get | open]"
+    usage: "Usage: /frontiers [get | open | close | inc | dec]"
 
 permissions:
   frontiers.get:
@@ -17,4 +17,7 @@ permissions:
     default: op
   frontiers.close:
     description: Allows /frontiers close
+    default: op
+  frontiers.inc:
+    description: Allows /frontiers inc
     default: op

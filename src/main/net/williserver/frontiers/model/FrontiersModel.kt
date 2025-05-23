@@ -65,21 +65,19 @@ class FrontiersModel(data: FrontiersData,
     /**
      * @return The width of the safezone, which is always the current tier * tierSize. The next space will be past that.
      */
-    private fun safezoneWidth() = currentTier * config.tierSize
+    fun safezoneWidth() = currentTier * config.tierSize
 
     /**
-     * @return The width of the frontier, which is always tiersize -- the Frontier is always the single last tier.
+     * @return The width of the frontier, which is always tiersize if the frontier is open -- the Frontier is always the single last tier.
+     * If the frontier is closed, the width is 0.
      */
-    private fun frontierWidth() = config.tierSize
+    fun frontierWidth() = if (open) config.tierSize else 0u
 
     /**
      * @return The effective border width of the server.
      * - Add an extra 1000 block width for the Frontier, if open.
      */
-    fun borderWidth() = when(open) {
-        true -> safezoneWidth() + frontierWidth()
-        false -> safezoneWidth()
-    }
+    fun borderWidth() = safezoneWidth() + frontierWidth()
 
     /*
      * Assorted helpers

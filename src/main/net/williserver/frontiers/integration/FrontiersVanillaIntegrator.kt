@@ -1,6 +1,7 @@
 package net.williserver.frontiers.integration
 
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.williserver.frontiers.model.FrontiersModel
 import org.bukkit.Bukkit
@@ -13,14 +14,21 @@ import org.bukkit.Bukkit
  * @author Willmo3
  */
 class FrontiersVanillaIntegrator(private val model: FrontiersModel) {
+    /**
+     * @return TextComponent with information about the server.
+     */
+    fun info(): TextComponent =
+        prefixedMessage(Component.text("Border width: ${model.borderWidth()} blocks.\n", NamedTextColor.GRAY))
+            .append(Component.text("Heartlands width: ${model.safezoneWidth()} blocks, starting from world spawn.\n", NamedTextColor.GRAY))
+            .append(Component.text("Frontier width: ${model.frontierWidth()} blocks, starting from the end of the Heartlands.", NamedTextColor.GRAY))
 
     /**
      * Invoke a command to update the width of the Frontier to the border width recognized by the model.
-     * Broadcast the new border width.
+     * Then, broadcast the new border width.
      */
     fun updateWidth() {
         runCommand("worldborder set ${model.borderWidth()}")
-        broadcastPrefixedMessage(Component.text("The border width is now ${model.borderWidth()}.", NamedTextColor.GRAY))
+        broadcastMessage(info())
     }
 
     /**
