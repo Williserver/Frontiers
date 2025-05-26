@@ -2,7 +2,7 @@ package net.williserver.frontiers.command
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import net.williserver.frontiers.integration.FrontiersVanillaIntegrator
+import net.williserver.frontiers.integration.FrontiersWorldIntegrator
 import net.williserver.frontiers.integration.broadcastPrefixedMessage
 import net.williserver.frontiers.integration.sendErrorMessage
 import net.williserver.frontiers.integration.sendPrefixedMessage
@@ -19,7 +19,7 @@ import org.bukkit.entity.Player
  * @param integrator Vanilla integration, for changing world after commands.
  * @author Willmo3
  */
-class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersVanillaIntegrator): CommandExecutor {
+class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersWorldIntegrator): CommandExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, alias: String, args: Array<out String>): Boolean {
         // Pull up usage info if no arguments.

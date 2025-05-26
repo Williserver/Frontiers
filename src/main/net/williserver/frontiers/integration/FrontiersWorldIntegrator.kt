@@ -15,7 +15,7 @@ import kotlin.math.abs
  * @param model Underlying Frontiers model.
  * @author Willmo3
  */
-class FrontiersVanillaIntegrator(private val model: FrontiersModel) {
+class FrontiersWorldIntegrator(private val model: FrontiersModel) {
     /**
      * Basis for a given session. Worldspawn/
      */
@@ -52,7 +52,8 @@ class FrontiersVanillaIntegrator(private val model: FrontiersModel) {
      * Then, broadcast the new border width.
      */
     fun updateWidth() {
-        runCommand("worldborder set ${model.borderWidth()}")
+        // Dividing width by two because wb plugin uses radius, rather than width like standard vanilla.
+        runCommand("wb $WORLDNAME set ${model.borderWidth() / 2u} $BASISNAME")
         broadcastMessage(info())
     }
 
@@ -61,4 +62,16 @@ class FrontiersVanillaIntegrator(private val model: FrontiersModel) {
      */
     private fun runCommand(command: String)
         = Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, command)
+
+    companion object {
+        /**
+         * Name of world Frontier is applied to.
+         */
+        const val WORLDNAME = "world"
+
+        /**
+         * Name of the worldborder basis for use in wb commands.
+         */
+        const val BASISNAME = "spawn"
+    }
 }

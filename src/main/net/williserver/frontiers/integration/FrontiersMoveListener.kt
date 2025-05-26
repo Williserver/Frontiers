@@ -17,7 +17,7 @@ import java.util.UUID
  * @param integrator State for integrating frontiers with vanilla.
  * @author Willmo3
  */
-class FrontierEnterListener(val integrator: FrontiersVanillaIntegrator): Listener {
+class FrontierEnterListener(val integrator: FrontiersWorldIntegrator): Listener {
     /**
      * Set of online players in the Frontier
      */

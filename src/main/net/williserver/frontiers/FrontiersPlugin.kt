@@ -3,7 +3,7 @@ package net.williserver.frontiers
 import net.williserver.frontiers.command.FrontiersCommand
 import net.williserver.frontiers.command.FrontiersTabCompleter
 import net.williserver.frontiers.integration.FrontierEnterListener
-import net.williserver.frontiers.integration.FrontiersVanillaIntegrator
+import net.williserver.frontiers.integration.FrontiersWorldIntegrator
 import net.williserver.frontiers.model.FrontiersModel
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -32,7 +32,7 @@ class FrontiersPlugin: JavaPlugin() {
         logger.info("Loaded persistent data.")
 
         /* Prepare vanilla command / listener integration */
-        val integrator = FrontiersVanillaIntegrator(model)
+        val integrator = FrontiersWorldIntegrator(model)
         server.pluginManager.registerEvents(FrontierEnterListener(integrator), this)
         logger.info("Prepared vanilla integration.")
 
