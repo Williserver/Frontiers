@@ -170,10 +170,15 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersWorld
             return true
         }
 
-        val message = when (integrator.inHeartlands(s)) {
-            true -> Component.text("You are in tier ${integrator.tierOf(s)}, placing you in the Heartlands.", NamedTextColor.GREEN)
-            false -> Component.text("You are in tier ${integrator.tierOf(s)}, placing you in the Frontier!", NamedTextColor.DARK_RED)
+        val message = if(integrator.inBasisWorld(s)) {
+            when (integrator.inHeartlands(s)) {
+                true -> Component.text("You are in tier ${integrator.tierOf(s)}, placing you in the Heartlands.", NamedTextColor.GREEN)
+                false -> Component.text("You are in tier ${integrator.tierOf(s)}, placing you in the Frontier!", NamedTextColor.DARK_RED)
+            }
+        } else {
+            Component.text("You are in a strange part of the Frontier...", NamedTextColor.DARK_RED)
         }
+
         s.sendMessage(prefixedMessage(message))
         return true
     }
