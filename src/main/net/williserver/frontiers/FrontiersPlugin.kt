@@ -3,6 +3,7 @@ package net.williserver.frontiers
 import net.williserver.frontiers.command.FrontiersCommand
 import net.williserver.frontiers.command.FrontiersTabCompleter
 import net.williserver.frontiers.integration.FrontierEnterListener
+import net.williserver.frontiers.integration.FrontierDieListener
 import net.williserver.frontiers.integration.FrontiersWorldIntegrator
 import net.williserver.frontiers.model.FrontiersModel
 import org.bukkit.plugin.java.JavaPlugin
@@ -34,6 +35,7 @@ class FrontiersPlugin: JavaPlugin() {
         /* Prepare vanilla command / listener integration */
         val integrator = FrontiersWorldIntegrator(model)
         server.pluginManager.registerEvents(FrontierEnterListener(integrator), this)
+        server.pluginManager.registerEvents(FrontierDieListener(integrator, logger), this)
         logger.info("Prepared vanilla integration.")
 
         /* Ready command */
