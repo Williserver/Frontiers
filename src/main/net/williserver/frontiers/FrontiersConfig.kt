@@ -53,4 +53,8 @@ class FrontiersConfigLoader(private val handler: LogHandler, private val fileCon
  * @param tierSize Amount of land per tier.
  */
 @Serializable
-data class FrontiersConfig(val tierSize: UInt)
+data class FrontiersConfig(val tierSize: UInt = DEFAULT_TIER_SIZE) {
+    companion object {
+        const val DEFAULT_TIER_SIZE = 1000u
+    }
+}

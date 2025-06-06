@@ -22,7 +22,15 @@ class FrontiersPlugin: JavaPlugin() {
     private lateinit var model: FrontiersModel
 
     override fun onEnable() {
-        // TODO: warn about tiers!
+        /* Check for incompatible plugins. */
+        if (server.pluginManager.isPluginEnabled("Tiers")) {
+            logger.err("Frontiers is incompatible with Tiers, since both manipulate the worldborder. Disabling Frontiers now!")
+            // lateinit exception will be thrown -- but this is fine.
+            // better than overriding savedata with a tombstone model!
+            server.pluginManager.disablePlugin(this)
+            return
+        }
+
         /* Load config */
         saveDefaultConfig()
         val frontiersConfig = FrontiersConfigLoader(logger, config).config
