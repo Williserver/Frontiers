@@ -43,7 +43,8 @@ class FrontiersWorldIntegrator(private val model: FrontiersModel) {
      * @return TextComponent with information about the server.
      */
     fun info(): TextComponent =
-        prefixedMessage(Component.text("Border width: ${model.borderWidth()} blocks.\n", NamedTextColor.GRAY))
+        prefixedMessage(Component.text("Centered at x${basis.x}, z${basis.z}.\n", NamedTextColor.GRAY))
+            .append(prefixedMessage(Component.text("Border width: ${model.borderWidth()} blocks.\n", NamedTextColor.GRAY)))
             .append(prefixedMessage(Component.text("Heartlands width: ${model.safezoneWidth()} blocks, starting from world spawn.\n", NamedTextColor.GRAY)))
             .append(prefixedMessage(Component.text("Frontier width: ${model.frontierWidth()} blocks, starting from the end of the Heartlands.", NamedTextColor.GRAY)))
 
