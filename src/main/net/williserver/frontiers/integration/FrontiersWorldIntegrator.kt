@@ -32,25 +32,22 @@ class FrontiersWorldIntegrator(private val model: FrontiersModel) {
             return false
         }
 
-        // Extend safezone radius by 2 to avoid rounding subtleties
-        val safezoneRadius = (model.safezoneWidth() / 2u).toDouble() + 2
-        val xDistance = abs(player.location.x - basis.x)
-        val zDistance = abs(player.location.z - basis.z)
-
-        return xDistance <= safezoneRadius && zDistance <= safezoneRadius
+        // Otherwise, either the frontier is closed
+        // Or the player's in-game location is just before the bounds of the model's last tier (off by one situation, hence less than)
+        return model.frontierWidth() == 0u || tierOf(player).toUInt() < model.currentTier
     }
 
     /**
      * @param player Player to check tier of.
-     * @return The tier the player is currently in.
+     * @return The tier the player is currently in, or -1 if they're in another dimension.
      *
      * Each tier has a radius, and the player's position will fit within that radius.
      * We return the lowest tier whose radius encompasses the player's current location.
      */
-    fun tierOf(player: Player): UInt {
+    fun tierOf(player: Player): Long {
         // All territory outside the overworld is considered to be tier 0.
         if (player.world != basis.world) {
-            return 0u
+            return -1
         }
 
         val xDistance = abs(player.location.x - basis.x).toUInt()
@@ -60,7 +57,7 @@ class FrontiersWorldIntegrator(private val model: FrontiersModel) {
         // Add one to account for truncation.
         val xTier = xDistance / (model.tierWidth() / 2u + 1u)
         val zTier = zDistance / (model.tierWidth() / 2u + 1u)
-        return max(xTier, zTier)
+        return max(xTier, zTier).toLong()
     }
 
     /**

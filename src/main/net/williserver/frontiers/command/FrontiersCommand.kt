@@ -6,7 +6,6 @@ import net.williserver.frontiers.integration.FrontiersWorldIntegrator
 import net.williserver.frontiers.integration.broadcastPrefixedMessage
 import net.williserver.frontiers.integration.prefixedMessage
 import net.williserver.frontiers.integration.sendErrorMessage
-import net.williserver.frontiers.integration.sendPrefixedMessage
 import net.williserver.frontiers.model.FrontiersModel
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
