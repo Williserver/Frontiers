@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.williserver.frontiers.integration.FrontiersWorldIntegrator
 import net.williserver.frontiers.integration.broadcastPrefixedMessage
+import net.williserver.frontiers.integration.prefixedMessage
 import net.williserver.frontiers.integration.sendErrorMessage
 import net.williserver.frontiers.integration.sendPrefixedMessage
 import net.williserver.frontiers.model.FrontiersModel
@@ -170,10 +171,11 @@ class FrontiersCommand(val model: FrontiersModel, val integrator: FrontiersWorld
             return true
         }
 
-        when (integrator.inHeartlands(s)) {
-            true -> sendPrefixedMessage(s, Component.text("You are in the Heartlands.", NamedTextColor.GREEN))
-            false -> sendPrefixedMessage(s, Component.text("You are in the Frontier!", NamedTextColor.DARK_RED))
+        val message = when (integrator.inHeartlands(s)) {
+            true -> Component.text("You are in tier ${integrator.tierOf(s)}, placing you in the Heartlands.", NamedTextColor.GREEN)
+            false -> Component.text("You are in tier ${integrator.tierOf(s)}, placing you in the Frontier!", NamedTextColor.DARK_RED)
         }
+        s.sendMessage(prefixedMessage(message))
         return true
     }
 }

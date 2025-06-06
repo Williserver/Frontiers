@@ -79,6 +79,10 @@ class FrontiersModel(data: FrontiersData,
      */
     fun borderWidth() = safezoneWidth() + frontierWidth()
 
+    /**
+     * @return width of a single tier, as defined by the config.
+     */
+    fun tierWidth() = config.tierSize
 
     /*
      * Assorted helpers

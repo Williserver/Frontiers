@@ -7,6 +7,7 @@ import net.williserver.frontiers.model.FrontiersModel
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import kotlin.math.abs
+import kotlin.math.max
 
 /**
  * Integrates the model with the actual server world.
@@ -37,6 +38,29 @@ class FrontiersWorldIntegrator(private val model: FrontiersModel) {
         val zDistance = abs(player.location.z - basis.z)
 
         return xDistance <= safezoneRadius && zDistance <= safezoneRadius
+    }
+
+    /**
+     * @param player Player to check tier of.
+     * @return The tier the player is currently in.
+     *
+     * Each tier has a radius, and the player's position will fit within that radius.
+     * We return the lowest tier whose radius encompasses the player's current location.
+     */
+    fun tierOf(player: Player): UInt {
+        // All territory outside the overworld is considered to be tier 0.
+        if (player.world != basis.world) {
+            return 0u
+        }
+
+        val xDistance = abs(player.location.x - basis.x).toUInt()
+        val zDistance = abs(player.location.z - basis.z).toUInt()
+
+        // Divide width into radius for distance computations.
+        // Add one to account for truncation.
+        val xTier = xDistance / (model.tierWidth() / 2u + 1u)
+        val zTier = zDistance / (model.tierWidth() / 2u + 1u)
+        return max(xTier, zTier)
     }
 
     /**
