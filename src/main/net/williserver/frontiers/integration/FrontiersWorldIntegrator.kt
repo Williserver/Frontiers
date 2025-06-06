@@ -73,7 +73,7 @@ class FrontiersWorldIntegrator(private val model: FrontiersModel) {
         prefixedMessage(Component.text("Centered at x${basis.x}, z${basis.z}.\n", NamedTextColor.GRAY))
             .append(prefixedMessage(Component.text("Border width: ${model.borderWidth()} blocks.\n", NamedTextColor.GRAY)))
             .append(prefixedMessage(Component.text("Heartlands width: ${model.safezoneWidth()} blocks, starting from world spawn.\n", NamedTextColor.GRAY)))
-            .append(prefixedMessage(Component.text("Frontier width: ${model.frontierWidth()} blocks, starting from the end of the Heartlands.", NamedTextColor.GRAY)))
+            .append(prefixedMessage(Component.text("Frontier width: ${model.frontierWidth() / 2u} blocks in each direction, starting from the end of the Heartlands.", NamedTextColor.GRAY)))
 
     /**
      * Invoke a command to update the width of the Frontier to the border width recognized by the model.
